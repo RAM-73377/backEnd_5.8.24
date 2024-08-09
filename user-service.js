@@ -5,10 +5,10 @@ const db = mysql.createConnection(config.database);
 
 db.connect((err) => {
   if (err) {
-    console.log("error db")
+    console.log("error db");
     return;
   }
-  console.log("connected")
+  console.log("connected");
 });
 
 const createUser = async (userData) => {
@@ -29,4 +29,36 @@ const createUser = async (userData) => {
   }
 };
 
-module.exports = { createUser };
+const updateUser = async (userId, updateData) => {
+  const updateQuery = 'UPDATE users SET firstName = ?, lastName = ?, email = ?, password = ?, contactNumber = ?, domain = ? WHERE id = ?';
+
+  try {
+    await db.promise().query(updateQuery, [
+      updateData.firstName,
+      updateData.lastName,
+      updateData.email,
+      updateData.password,
+      updateData.contactNumber,
+      updateData.domain,
+      userId
+    ]);
+    return { message: 'Account updated successfully' };
+  } catch (err) {
+    console.error('Error updating user:', err);
+    throw new Error('Error updating account');
+  }
+};
+
+const deleteUser = async (userId) => {
+  const deleteQuery = 'DELETE FROM users WHERE id = ?';
+
+  try {
+    await db.promise().query(deleteQuery, [userId]);
+    return { message: 'Account deleted successfully' };
+  } catch (err) {
+    console.error('Error deleting user:', err);
+    throw new Error('Error deleting account');
+  }
+};
+
+module.exports = { createUser, updateUser, deleteUser };
