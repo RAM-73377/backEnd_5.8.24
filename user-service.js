@@ -29,7 +29,7 @@ const createUser = async (userData) => {
   }
 };
 
-const updateUser = async (userId, updateData) => {
+const updateUser = async (id, updateData) => {
   const updateQuery = 'UPDATE users SET firstName = ?, lastName = ?, email = ?, password = ?, contactNumber = ?, domain = ? WHERE id = ?';
 
   try {
@@ -40,7 +40,7 @@ const updateUser = async (userId, updateData) => {
       updateData.password,
       updateData.contactNumber,
       updateData.domain,
-      userId
+      parseInt(id),
     ]);
     return { message: 'Account updated successfully' };
   } catch (err) {
@@ -49,11 +49,11 @@ const updateUser = async (userId, updateData) => {
   }
 };
 
-const deleteUser = async (userId) => {
+const deleteUser = async (id) => {
   const deleteQuery = 'DELETE FROM users WHERE id = ?';
 
   try {
-    await db.promise().query(deleteQuery, [userId]);
+    await db.promise().query(deleteQuery, [id]);
     return { message: 'Account deleted successfully' };
   } catch (err) {
     console.error('Error deleting user:', err);
